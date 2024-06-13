@@ -7,30 +7,35 @@ import os
 
 st.title("Grapevine Image Classification")
 
-MODEL_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/blob/main/model.keras"
-MODEL_PATH = 'model.keras'
+MODEL_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/raw/main/save_model.keras"
 
 def download_model(url, filename):
     if not os.path.exists(filename):
-        with st.spinner("Downloading model..."):
+        with st.spinner(f"Downloading {filename}..."):
             try:
                 response = requests.get(url)
                 response.raise_for_status()
                 with open(filename, 'wb') as file:
                     file.write(response.content)
-                st.success("Model downloaded successfully!")
+                st.success(f"{filename} downloaded successfully!")
             except requests.RequestException as e:
-                st.error(f"Error downloading the model: {e}")
+                st.error(f"Error downloading {filename}: {e}")
+                return False
+    return True
 
 @st.cache_resource
 def load_model():
-    try:
-        download_model(MODEL_URL, MODEL_PATH)
-        model = tf.keras.models.load_model(MODEL_PATH)
-        st.write("Model loaded successfully")  # Debug statement to confirm model loading
-        return model
-    except Exception as e:
-        st.error(f"Error loading the model: {e}")
+    model_filename = 'model.keras'
+    if download_model(MODEL_URL, model_filename):
+        try:
+            model = tf.keras.models.load_model(model_filename)
+            st.write("Model loaded successfully")  # Debug statement to confirm model loading
+            return model
+        except Exception as e:
+            st.error(f"Error loading the model: {e}")
+            return None
+    else:
+        st.error("Model download failed. Cannot load model.")
         return None
 
 model = load_model()
@@ -71,5 +76,6 @@ if model is not None:
         except Exception as e:
             st.error(f"Error in classifying the image: {e}")
             st.write(e)  # Log the detailed exception for debugging
+
 else:
     st.error("Model could not be loaded. Please check the logs for more details.")
