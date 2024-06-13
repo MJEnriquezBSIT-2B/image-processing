@@ -44,7 +44,6 @@ def load_model():
             st.write("Model loaded successfully")  # Debug statement to confirm model loading
             return model
         except Exception as e:
-            st.error(f"Error loading the model: {e}")
             st.write(f"Model file paths: {model_json_filename}, {model_weights_filename}")  # Debug: Show model file paths
             st.write(f"Files in current directory: {os.listdir()}")  # Debug: List files in directory
             return None
