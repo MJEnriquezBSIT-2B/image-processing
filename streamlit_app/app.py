@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 
 # Load your trained model
-model = tf.keras.models.load_model('https://github.com/DesireeDomingo-BSIT2B/image-classification/blob/main/save_model.keras')
+model = tf.keras.models.load_model('https://github.com/MJEnriquezBSIT-2B/image-processing/blob/main/save_model.keras')
 
 def process_image(img):
     # Preprocess the image as needed (resize, normalization, etc.)
