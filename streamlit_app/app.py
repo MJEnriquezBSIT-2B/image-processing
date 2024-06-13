@@ -1,6 +1,7 @@
 import streamlit as st
 import tensorflow as tf
-from tensorflow.keras.models import model_from_json
+from tensorflow.keras.models import model_from_json, Sequential
+from tensorflow.keras.layers import InputLayer, Rescaling, Conv2D, MaxPooling2D, Flatten, Dense
 from PIL import Image
 import numpy as np
 import requests
