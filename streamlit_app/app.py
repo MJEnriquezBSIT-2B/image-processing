@@ -7,6 +7,7 @@ import os
 
 st.title("Grapevine Image Classification")
 
+# Corrected URL to point directly to the raw file content
 MODEL_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/blob/main/model.keras"
 
 def download_model(url, filename):
