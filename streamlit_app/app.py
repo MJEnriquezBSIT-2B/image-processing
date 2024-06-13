@@ -7,7 +7,8 @@ import os
 
 st.title("Grapevine Image Classification")
 
-MODEL_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/raw/main/model.keras"
+# Corrected URL to point directly to the raw file content
+MODEL_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/blob/main/model.keras"
 
 def download_model(url, filename):
     if not os.path.exists(filename):
@@ -20,6 +21,7 @@ def download_model(url, filename):
                 st.success(f"{filename} downloaded successfully!")
             except requests.RequestException as e:
                 st.error(f"Error downloading {filename}: {e}")
+                st.write(f"Response content: {response.content}")  # Debug: Show response content
                 return False
     return True
 
@@ -33,6 +35,8 @@ def load_model():
             return model
         except Exception as e:
             st.error(f"Error loading the model: {e}")
+            st.write(f"Model file path: {model_filename}")  # Debug: Show model file path
+            st.write(f"Files in current directory: {os.listdir()}")  # Debug: List files in directory
             return None
     else:
         st.error("Model download failed. Cannot load model.")
