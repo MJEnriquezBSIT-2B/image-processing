@@ -1,5 +1,6 @@
 import streamlit as st
 import tensorflow as tf
+from tensorflow.keras.models import model_from_json
 from PIL import Image
 import numpy as np
 import requests
@@ -7,10 +8,11 @@ import os
 
 st.title("Grapevine Image Classification")
 
-# Corrected URL to point directly to the raw file content
-MODEL_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/blob/main/model.keras"
+# Corrected URLs to point directly to the raw file content
+MODEL_JSON_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/raw/main/model.json"
+MODEL_WEIGHTS_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/raw/main/model.h5"
 
-def download_model(url, filename):
+def download_file(url, filename):
     if not os.path.exists(filename):
         with st.spinner(f"Downloading {filename}..."):
             try:
@@ -21,21 +23,28 @@ def download_model(url, filename):
                 st.success(f"{filename} downloaded successfully!")
             except requests.RequestException as e:
                 st.error(f"Error downloading {filename}: {e}")
-                st.write(f"Response content: {response.content}")  # Debug: Show response content
                 return False
     return True
 
 @st.cache_resource
 def load_model():
-    model_filename = 'model.keras'
-    if download_model(MODEL_URL, model_filename):
+    model_json_filename = 'model.json'
+    model_weights_filename = 'model.h5'
+
+    if download_file(MODEL_JSON_URL, model_json_filename) and download_file(MODEL_WEIGHTS_URL, model_weights_filename):
         try:
-            model = tf.keras.models.load_model(model_filename)
+            # Load the model architecture
+            with open(model_json_filename, "r") as json_file:
+                model_json = json_file.read()
+                model = model_from_json(model_json)
+
+            # Load the model weights
+            model.load_weights(model_weights_filename)
             st.write("Model loaded successfully")  # Debug statement to confirm model loading
             return model
         except Exception as e:
             st.error(f"Error loading the model: {e}")
-            st.write(f"Model file path: {model_filename}")  # Debug: Show model file path
+            st.write(f"Model file paths: {model_json_filename}, {model_weights_filename}")  # Debug: Show model file paths
             st.write(f"Files in current directory: {os.listdir()}")  # Debug: List files in directory
             return None
     else:
