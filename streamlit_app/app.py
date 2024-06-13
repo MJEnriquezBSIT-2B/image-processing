@@ -7,7 +7,7 @@ import os
 
 st.title("Grapevine Image Classification")
 
-MODEL_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/raw/main/save_model.keras"
+MODEL_URL = "https://github.com/MJEnriquezBSIT-2B/image-processing/raw/main/model.keras"
 
 def download_model(url, filename):
     if not os.path.exists(filename):
